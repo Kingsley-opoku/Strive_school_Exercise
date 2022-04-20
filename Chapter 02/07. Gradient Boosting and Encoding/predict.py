@@ -1,4 +1,6 @@
 from test import forest
+from train import ct
+#from sklearn.compose import ColumnTransformer
 
 
 model=forest
@@ -18,4 +20,7 @@ while True:
     predict
     
     '''
+    
+
+    
 #print("You are too fucked up 1 milly")
