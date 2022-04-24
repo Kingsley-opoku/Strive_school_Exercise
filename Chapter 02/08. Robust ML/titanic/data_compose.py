@@ -1,6 +1,7 @@
+import csv
 from IPython.display import clear_output
 import numpy    as np
-import seaborn  as sb
+#import seaborn  as sb
 import matplotlib.pyplot as plt
 import pandas as pd 
 from sklearn.model_selection import train_test_split
@@ -17,14 +18,12 @@ from sklearn.experimental  import enable_hist_gradient_boosting # Necesary for H
 from sklearn.ensemble      import HistGradientBoostingClassifier
 from xgboost               import XGBClassifier
 from lightgbm              import LGBMClassifier
+from catboost              import CatBoostClassifier
 
-
-def data_to_pandas(pt):
+def data_to_pandas(pt: csv) ->pd.DataFrame:
     data=pd.read_csv(pt, index_col='PassengerId')
     return data
     
-def column_to_trans(column):
-    pass
 
 
 def make_pipe(num_vars, cat_vars):
@@ -45,7 +44,7 @@ def make_pipe(num_vars, cat_vars):
     return tree_prepro
 
 
-def model_types(num_vars,cat_vars):
+def model_classification(num_vars,cat_vars):
     tree_classifiers = {
     "Decision Tree": DecisionTreeClassifier(random_state=0),
     "Extra Trees":   ExtraTreesClassifier(random_state=0),
@@ -55,7 +54,7 @@ def model_types(num_vars,cat_vars):
     "Skl HistGBM":   HistGradientBoostingClassifier(random_state=0),
     "XGBoost":       XGBClassifier(),
     "LightGBM":      LGBMClassifier(random_state=0),
-  #"CatBoost":      CatBoostClassifier(n_estimators=100)
+    "CatBoost":      CatBoostClassifier(n_estimators=100, allow_writing_files=False)
     }
     tree_classifiers = {name: make_pipeline(make_pipe(num_vars, cat_vars), model) for name, model in tree_classifiers.items()}
-    return tree_classifiers
+    return tree_classifiers.items()

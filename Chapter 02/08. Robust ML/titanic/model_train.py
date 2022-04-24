@@ -1,3 +1,4 @@
+from unittest import result
 import data_compose as dc
 import pandas as pd
 from sklearn.metrics import  accuracy_score, balanced_accuracy_score, plot_confusion_matrix
@@ -51,7 +52,7 @@ def fit_pred_model():
 
     x_train, x_val, y_train, y_val = train_test_split(x, y,random_state=0,test_size=0.2,stratify=y)
 
-    for model_name, model in dc.model_types(num_vars, cat_vars).items():
+    for model_name, model in dc.model_types(num_vars, cat_vars):
         start_time = time.time()
     
         # FOR EVERY PIPELINE (PREPRO + MODEL) -> TRAIN WITH TRAIN DATA (x_train)
@@ -67,13 +68,11 @@ def fit_pred_model():
                               "Time":     total_time},
                               ignore_index=True)
 
+    return results
 
+    
 
-    results_ord = results.sort_values(by=['Accuracy'], ascending=False, ignore_index=True)
-    results_ord.index += 1 
-    print(results_ord.style.bar(subset=['Accuracy', 'Bal Acc.'], vmin=0, vmax=100, color='#5fba7d'))
-
-
+print(fit_pred_model())
 
 def cross_val_pred():
     results = pd.DataFrame({'Model': [], 'Accuracy': [], 'Bal Acc.': [], 'Time': []})
@@ -97,7 +96,7 @@ def cross_val_pred():
     """
 
     skf = StratifiedKFold(n_splits=10, shuffle=True, random_state=0)
-    for model_name, model in dc.model_types(num_vars, cat_vars).items():
+    for model_name, model in dc.model_types(num_vars, cat_vars):
 
         start_time = time.time()
         pred = cross_val_predict(model, x, y, cv=skf)
@@ -107,8 +106,4 @@ def cross_val_pred():
                               "Bal Acc.": balanced_accuracy_score(y, pred)*100,
                               "Time":     total_time},
                               ignore_index=True)
-
-
-    results_ord = results.sort_values(by=['Accuracy'], ascending=False, ignore_index=True)
-    results_ord.index += 1 
-    return results_ord.style.bar(subset=['Accuracy', 'Bal Acc.'], vmin=0, vmax=100, color='#5fba7d')
+    return results
