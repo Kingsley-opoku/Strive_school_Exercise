@@ -54,15 +54,14 @@ x_mean_std=gt.get_feat_std_mean()
 res_mean_std=clf.train_pred(x=x_mean_std, y=target)
 print(f'{"*"*10} Training the model with x_mean_std feat: {"*"*10}\n {result_std}')
 
+# testing with diff regression model and predicting with diff statistics sample features
+
 x_statistic=gt.feat_stat_each_col()
 res_stat=clf.train_pred(x=x_statistic, y=target)
 print(f'{"*"*10} Training the model with varius statistics feat: {"*"*10}\n {result_std}')
 
 
-# best_model=regression().get("Linear")
 
-
-# joblib.dump(best_model, 'model.pkl')
 
 
 '''
@@ -106,3 +105,8 @@ print(f'{"*"*10} Training the model with varius statistics feat: {"*"*10}\n {res
 3   XGBoost   1.146716  0.816326  0.019298  11.714668
 4  LightGBM   1.192915  0.803496  0.020076   0.584437
 '''
+
+
+best_model=regressors.get('Linear')
+
+joblib.dump(best_model, 'model.pkl')
